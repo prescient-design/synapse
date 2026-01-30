@@ -1,0 +1,26 @@
+# @package _global_.datamodule
+
+_target_: light.datamodules._synapse_datamodule.SynapseDataModule
+
+root: ${paths.data_dir}
+lengths: [0.8, 0.1, 0.1]
+seed: 0x00B1
+batch_size: 32
+num_workers: 0
+persistent_workers: false
+pin_memory: false
+noise_level: 0.0
+edit_prob: 0.3
+num_samples: 1000
+input_type: 'trispecific'
+num_states: 297
+fixed_test_size: null
+test_different_motifs: false
+test_motif_seed_offset: 10000
+connectivity_split: false
+train_connectivity_types: null
+test_connectivity_types: null
+num_fabs: 3
+num_motifs: 10
+motif_length: 4
+epistasis_factor: 0.0

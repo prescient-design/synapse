@@ -1,0 +1,9 @@
+_target_: lightning.pytorch.trainer.Trainer
+accelerator: auto  # Automatically detect and use GPU if available
+check_val_every_n_epoch: 1
+default_root_dir: ${paths.output_dir}
+deterministic: False
+devices: 1
+max_epochs: 256
+min_epochs: 1
+gradient_clip_val: null  # Default to no gradient clipping

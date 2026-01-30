@@ -1,0 +1,22 @@
+_target_: light._synapse_module.SynapseLightningModule
+module:
+  _target_: models._conv.GINGNN
+  num_layers: 3
+  vocab_size: 21
+  emb_dim: 32
+  multiplier: 2
+  bn: false
+  sequence_aggregation: 'mean'
+  use_connectivity_embedding: true
+  connectivity_format: 'trispecific'
+optimizer:
+  _target_: torch.optim.Adam
+  _partial_: true
+  lr: 0.001
+  weight_decay: 0.0
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  factor: 0.1
+  mode: "min"
+  patience: 10

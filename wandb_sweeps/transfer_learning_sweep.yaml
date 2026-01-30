@@ -1,0 +1,134 @@
+name: transfer_learning_sweep
+description: |
+  Transfer Learning: Pretraining → Fine-tuning
+  
+  DATA SAMPLING STRATEGY (Pool ⊃ X ⊃ Y):
+    - Pool: 50,000 graphs generated
+    - X (pretraining): num_samples graphs with node-level fn_values  
+    - Y (fine-tuning): finetune_num_samples graphs with graph-level y
+    - Y ⊆ X ensures fine-tuning data was seen during pretraining
+  
+  TRAINING PIPELINE:
+    1. Pretrain: GNN learns to predict per-node fn_values (no global pooling)
+    2. Transfer: Copy encoder weights 
+    3. Fine-tune: Train to predict per-graph y (with global pooling)
+  
+  FINE-TUNING STRATEGY:
+    - freeze_pretrained_weights: True → Only train pooling + post-MLP
+    - Frozen: token embeddings, transformer blocks, GNN layers
+    - Trainable: pool_norm, post_mp_hidden, post_mp_output
+  
+  KEY QUESTION: How much fine-tuning data (Y) is needed given fixed pretraining data (X)?
+
+project: functional_modelling_sweeps
+
+program: train_with_pretraining.py
+method: grid
+
+metric:
+  goal: minimize
+  name: "Loss (Validation)"
+
+parameters:
+  # Random seeds for statistical robustness
+  seed:
+    values: [256, 512, 1024, 42, 123]
+
+  # ==========================================================================
+  # Data Sampling
+  # ==========================================================================
+  
+  # Pool size (always 50k)
+  pretraining.pool_size:
+    value: 50000
+
+  # X: Pretraining samples (graphs with node-level fn_values)
+  pretraining.num_samples:
+    values: [100, 1000, 10000, 50000]
+
+  # Y: Fine-tuning samples (graphs with graph-level y), Y ≤ X
+  pretraining.finetune_num_samples:
+    values: [10, 20, 50, 100, 200, 500, 1000, 2000, 5000]
+
+  # ==========================================================================
+  # Pretraining Configuration  
+  # ==========================================================================
+  
+  pretraining.enabled:
+    value: true
+
+  pretraining.freeze_pretrained_weights:
+    value: true  # Only train pooling + post-MLP during fine-tuning
+
+  pretraining.max_epochs:
+    value: 50
+
+  pretraining.batch_size:
+    value: 32
+
+  pretraining.lr:
+    value: 0.001
+
+  pretraining.weight_decay:
+    value: 0.0
+
+  # ==========================================================================
+  # Model Architecture (GINGNN)
+  # ==========================================================================
+  
+  module:
+    value: gin
+
+  module.module.use_connectivity_embedding:
+    value: true
+
+  module.module.emb_dim:
+    value: 64
+
+  module.module.num_layers:
+    value: 3
+
+  module.module.sequence_aggregation:
+    value: "mean"
+
+  # ==========================================================================
+  # Fine-tuning Training
+  # ==========================================================================
+  
+  trainer.max_epochs:
+    value: 50
+
+  trainer.gradient_clip_val:
+    value: 1.0
+
+  trainer:
+    value: default
+
+  # ==========================================================================
+  # Dataset Configuration
+  # ==========================================================================
+  
+  datamodule.input_type:
+    value: "trispecific_example"
+
+  datamodule.noise_level:
+    value: 0.0
+
+  datamodule.edit_prob:
+    value: 0.3
+
+  datamodule.batch_size:
+    value: 32
+
+  datamodule.num_motifs:
+    value: 10
+
+  datamodule.motif_length:
+    value: 3
+
+  datamodule.epistasis_factor:
+    value: 0.0
+
+early_terminate:
+  type: hyperband
+  min_iter: 15

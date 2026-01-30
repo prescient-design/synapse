@@ -1,0 +1,14 @@
+defaults:
+  - gin
+
+# Override the module section to use MLP baseline model
+module:
+  _target_: models._conv.MLP
+  num_layers: 3
+  vocab_size: 21  # 21 amino acid tokens: '-ACDEFGHIKLMNPQRSTVWY'
+  emb_dim: 32
+  multiplier: 2
+  bn: false
+  sequence_aggregation: 'mean'
+  use_connectivity_embedding: true
+  connectivity_format: 'trispecific'  # Format for connectivity weights lookup

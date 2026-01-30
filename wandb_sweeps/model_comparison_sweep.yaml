@@ -1,0 +1,101 @@
+name: model_comparison_sample_sizes
+description: "Systematic comparison of GIN vs MLP across different training sample sizes"
+project: functional_modelling_sweeps
+
+program: train.py
+method: grid
+
+metric:
+  goal: minimize
+  name: "Loss (Validation)"
+
+parameters:
+  module:
+    values: 
+      - gin
+      - mlp
+  
+  datamodule.num_samples:
+    values:
+      - 100
+      - 200
+      - 300
+      - 400
+      - 500
+      - 600
+      - 700
+      - 800
+      - 900
+      - 1000
+      - 2000
+      - 5000
+      - 10000
+      - 20000   
+      - 50000   
+      - 100000  
+
+  
+  seed:
+    values: 
+      - 84
+      - 126
+      - 254
+      - 370
+      - 488
+  
+  datamodule.fixed_test_size:
+    value: 1000
+  
+  datamodule.test_different_motifs:
+    value: false
+  
+  module.module.emb_dim:
+    value: 64
+  
+  module.module.num_layers:
+    value: 3
+  
+  module.module.sequence_aggregation:
+    value: "mean"
+  
+  module.module.use_connectivity_embedding:
+    value: true
+  
+  trainer.max_epochs:
+    value: 30
+  
+  trainer.gradient_clip_val:
+    value: 1.0
+  
+  datamodule.input_type:
+    values: 
+      - "bispecific"
+      - "trispecific"
+      - "pentaspecific"
+      - "tetraspecific"
+      - "monospecific"
+  
+  datamodule.noise_level:
+    value: 0.0
+  
+  datamodule.edit_prob:
+    value: 0.3
+  
+  datamodule.batch_size:
+    value: 16
+
+  datamodule.num_motifs:
+    value: 10
+
+  datamodule.motif_length:
+    value: 3   
+  
+  datamodule.epistasis_factor:
+    value: 0.0
+
+  trainer:
+    value: default
+
+early_terminate:
+  type: hyperband
+  min_iter: 20 

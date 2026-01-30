@@ -1,0 +1,16 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - datamodule: default
+  - module: gin
+  - callbacks: default
+  - logger: wandb
+  - trainer: default
+  - paths: default
+  - hydra: default
+
+seed: null
+task_name: "train"
+test: True
+train: True

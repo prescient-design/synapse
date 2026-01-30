@@ -1,0 +1,5 @@
+root_dir: "/cv/home/southej4/from_prescient/prescient_gitlab/prescient/southej4/"
+data_dir: "/cv/home/southej4/from_prescient/prescient_gitlab/prescient/southej4/data/"
+log_dir: ${paths.root_dir}/logs/
+output_dir: ${hydra:runtime.output_dir}
+work_dir: ${hydra:runtime.cwd}

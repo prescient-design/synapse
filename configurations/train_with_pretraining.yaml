@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - _self_
+  - datamodule: default
+  - module: gin
+  - callbacks: default
+  - logger: wandb
+  - trainer: default
+  - paths: default
+  - hydra: default
+
+seed: 42
+task_name: "train_with_pretraining"
+test: True
+train: True
+
+pretraining:
+  enabled: True
+  pool_size: 50000
+  num_samples: 1000
+  finetune_num_samples: 100
+  batch_size: 32
+  lr: 0.001
+  weight_decay: 0.0
+  max_epochs: 100
+  freeze_pretrained_weights: False

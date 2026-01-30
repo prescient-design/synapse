@@ -1,0 +1,12 @@
+wandb:
+  _target_: lightning.pytorch.loggers.wandb.WandbLogger
+  anonymous: null
+  group: ""
+  id: null
+  job_type: ""
+  log_model: False
+  offline: False
+  prefix: ""
+  project: "ma_property_prediction"
+  save_dir: "${paths.output_dir}"
+  tags: [ ]

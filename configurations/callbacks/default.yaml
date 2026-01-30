@@ -1,0 +1,21 @@
+# @package _global_.callbacks
+
+defaults:
+  - early_stopping
+  - model_checkpoint
+  - _self_
+
+early_stopping:
+  monitor: "Loss (Validation)"
+  patience: 10
+  mode: "min"
+  min_delta: 0.0001
+
+model_checkpoint:
+  auto_insert_metric_name: False
+  dirpath: ${paths.output_dir}/checkpoints
+  filename: "epoch_{epoch:03d}"
+  monitor: "Loss (Validation)"
+  mode: "min"
+  save_top_k: 1
+  save_last: True
