@@ -51,9 +51,6 @@ class Attention(nn.Module):
 class TransformerBlock(nn.Module):
     """A single Transformer layer.
 
-    This implements a single layer of the Transformer, as described in section 3.1
-    of the paper.
-
     Args:
         d_model: int    
             The dimensionality of the model embeddings and sublayer outputs.
@@ -95,14 +92,10 @@ class TransformerBlock(nn.Module):
         Returns:
             FloatTensor of shape `(batch_size, sequence_length, d_model)`.
         """
-        # NOTE: this is a pre-norm Transformer, and differs from the original
-        # description in the paper.
-        # Apply the multi-head self-attention sublayer
 
         x_attn = self.attn(self.ln1(x))
         attn_sublayer_output = x + x_attn
 
-        # Apply the feed-forward sublayer
         x_ffn = self.ffn(self.ln2(attn_sublayer_output))
         ffn_sublayer_output = attn_sublayer_output + x_ffn
         return ffn_sublayer_output
@@ -119,11 +112,6 @@ class SwiGLU(nn.Module):
 
 class MultiHeadSelfAttention(nn.Module):
     """Multi-Head Self-Attention
-
-    This function implements section 3.2.2 of the Transformer paper. In particular,
-    given an input tensor of shape `(batch_size, sequence_length, d_model)`, we project
-    it to create queries, keys, and values, and then perform causal multi-headed attention with
-    those queries, keys, and values.
 
     Args:
         d_model: int
@@ -189,10 +177,6 @@ class MultiHeadSelfAttention(nn.Module):
                 "seq -> b... seq", torch.arange(sequence_length, device=x.device), b=[1] * len(b)
             )
 
-        # Apply positional encoding to Q and K
-        # Q and K have shape (..., num_heads, seq_len, d_k)
-        # token_positions has shape (..., seq_len) and will broadcast correctly
-        # We need to apply positional encoding per head, but pos_ids should only have batch and seq dimensions
         Q = self.positional_encoder(Q, token_positions)
         K = self.positional_encoder(K, token_positions)
 
