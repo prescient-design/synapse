@@ -26,6 +26,10 @@ Note that our experiments in the paper use the full paired OAS to sample sequenc
 
 If you find this work useful, please cite our ArXiv paper:
 ```bibtex
-@article{}, 
+@article{southern2026synapse,
+  title={Disentangling multispecific antibody function with graph neural networks},
+  author={Southern, Joshua and Lu, Changpeng and Nerli, Santrupti and Stanton, Samuel D and Watkins, Andrew M and Seeger, Franziska and Dreyer, Fr{\'e}d{\'e}ric A},
+  journal={arXiv preprint arXiv:2601.23212},
+  year={2026}
 }
 ```
